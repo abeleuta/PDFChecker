@@ -16,10 +16,10 @@ namespace PDFChecker {
 
         private PdfImageProcessor pdfImageProcessor = new PdfImageProcessor();
 
-        public ProcessingResult processPDF(PageText[] pagesText) {
+        public ProcessingResult ProcessPDF(PageText[] pagesText) {
 
             int numPages = pagesText.Length;
-            int numPagesWithLots = getNumPagesWithLots(pagesText[0].Text);
+            int numPagesWithLots = GetNumPagesWithLots(pagesText[0].Text);
 
             if (numPagesWithLots == 0) {
                 throw new ParserException("Could not find number of pages with lots!");
@@ -27,7 +27,7 @@ namespace PDFChecker {
 
             List<LotData> pkgListLotNumbers = new List<LotData>();
             for (int i = 0; i < numPagesWithLots; i++) {
-                addLotNumbersfromPkgList(pagesText[i], pkgListLotNumbers, i);
+                AddLotNumbersfromPkgList(pagesText[i], pkgListLotNumbers, i);
             }
 
             return new ProcessingResult() {
@@ -38,7 +38,7 @@ namespace PDFChecker {
 
         private static char[] SPACE_DELIMTERS = new char[] { ' ' };
 
-        private void addLotNumbersFromAssembledDoc(string pageText, IDictionary<string, int> docLotNumbers) {
+        private void AddLotNumbersFromAssembledDoc(string pageText, IDictionary<string, int> docLotNumbers) {
             int idx = pageText.IndexOf("Lot");
             if (idx >= 0) {
                 var words = pageText.Split(SPACE_DELIMTERS);
@@ -60,7 +60,7 @@ namespace PDFChecker {
             }
         }
 
-        public List<string> getMissingLotNumbers(string pdfPath, PdfReader reader, PageText []pagesText, ProcessingResult processingResults) {
+        public List<string> GetMissingLotNumbers(string pdfPath, PdfReader reader, PageText []pagesText, ProcessingResult processingResults) {
             List<string> missingLots = new List<string>();
 
             int numPages = pagesText.Length;
@@ -68,7 +68,7 @@ namespace PDFChecker {
 
             IDictionary<string, int> docLotNumbers = new Dictionary<string, int>();
             for (int i = numPagesWithLots; i < numPages; i++) {
-                addLotNumbersFromAssembledDoc(pagesText[i].Text, docLotNumbers);
+                AddLotNumbersFromAssembledDoc(pagesText[i].Text, docLotNumbers);
             }
 
             int pageNum = -1;
@@ -85,11 +85,8 @@ namespace PDFChecker {
                 }
 
                 if (!docLotNumbers.ContainsKey(lotData.LotNumber)) {
-                    //if (lotData.LotNumber == "1901101626") {
-                    //    int a = 5;
-                    //}
                     pageNumToSkip = pageNum;
-                    if (!doSecondProcess(pdfPath, reader, pageNum + 1, pagesText[pageNum], missingLots, docLotNumbers)) {
+                    if (!DoSecondProcess(pdfPath, reader, pageNum + 1, pagesText[pageNum], missingLots, docLotNumbers)) {
                         if (!missingLots.Contains(lotData.LotNumber)) {
                             missingLots.Add(lotData.LotNumber);
                         }
@@ -101,7 +98,7 @@ namespace PDFChecker {
             return missingLots;
         }
 
-        private bool doSecondProcess(string pdfPath, PdfReader reader, int pageNo, PageText pageText, List<string> missingLots,
+        private bool DoSecondProcess(string pdfPath, PdfReader reader, int pageNo, PageText pageText, List<string> missingLots,
             IDictionary<string, int> docLotNumbers) {
 
             //first check if Line Num order is natural
@@ -138,7 +135,7 @@ namespace PDFChecker {
                 return false;
             }
 
-            var points = pdfImageProcessor.processPage(pdfPath, pageNo);
+            var points = pdfImageProcessor.ProcessPage(pdfPath, pageNo);
             List<string> groups = new List<string>();
 
             if (points != null) {
@@ -149,13 +146,10 @@ namespace PDFChecker {
                     size.Bottom = pageSize.Height - pageSize.Height * point.Y;
 
                     RenderFilter[] groupFilter = { new RegionTextRenderFilter(size) };
-                        //new Rectangle(0, pageSize.Height * point.Y, pageSize.Width, pageSize.Height * point.X)) };
-                    //new Rectangle(0, pageSize.Height * point.X, pageSize.Width, pageSize.Height * point.Y)) };
                     string groupedLotsText = PdfTextExtractor.GetTextFromPage(reader, pageNo,
                         new FilteredTextRenderListener(new LocationTextExtractionStrategy(), groupFilter));
 
                     groups.Add(groupedLotsText);
-                    //System.Diagnostics.Debug.Fail(groupedLotsText);
                 }
 
                 string lineNo = pageText.LineNumbers[0];
@@ -193,14 +187,9 @@ namespace PDFChecker {
                             if (lotNrIndex < pageText.LotNumbers.Length - 1) {
                                 lotNumber = pageText.LotNumbers[++lotNrIndex];
                                 lotNumberToCheck = lotNumber;
-                                //if (lotNumber == "1901101626") {
-                                //    int a = 5;
-                                //}
                             }
                         }
                     }
-                    //System.Diagnostics.Debug.Print(txt);
-                    //System.Diagnostics.Debug.Print("--------------------------------");
                 }
 
                 foreach(var lotNr in lotNumbersToCheck) {
@@ -217,7 +206,7 @@ namespace PDFChecker {
             return false;
         }
 
-        private void addLotNumbersfromPkgList(PageText pageText, List<LotData> lotNumbers, int pageNo) {
+        private void AddLotNumbersfromPkgList(PageText pageText, List<LotData> lotNumbers, int pageNo) {
             if (pageText.LineNumbers.Length == 0) {
                 //there are no line numbers, so ignore the page
                 return;
@@ -301,19 +290,12 @@ namespace PDFChecker {
                                 string lotNumber = line.Substring(index).Trim();
                                 if (numNumbers == 1) {
                                     if (lotNumber.Length > 2) {
-                                        //if (lotNumberIndex >= pageText.LotNumbers.Length) {
-                                        //    int a = 7;
-                                        //}
                                         if (lotNumber == pageText.LotNumbers[lotNumberIndex]) {
                                             lotNumbers.Add(new LotData() {
                                                 PageNumber = pageNo,
                                                 LotNumber = lotNumber
                                             });
                                             lotNumberIndex++;
-                                        //} else {
-                                            //lotNumbers.Add(new LotData() {
-                                            //    LotNumber = lotNumber + " <=> " + pageText.LotNumbers[lotNumberIndex]
-                                            //});
                                         }
                                     }
                                 } else if (lotNumber == pageText.LotNumbers[lotNumberIndex]) {
@@ -328,7 +310,7 @@ namespace PDFChecker {
             }
         }
 
-        private int getNumPagesWithLots(string firstPageText) {
+        private int GetNumPagesWithLots(string firstPageText) {
 
             Regex regex = new Regex(@"\d+\((\d+)\)");
 

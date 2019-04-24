@@ -15,9 +15,9 @@ namespace PDFChecker {
         public string processPdf(string pdfPath) {
 
             using (PdfReader reader = new PdfReader(pdfPath)) {
-                var pagesText = extractor.extractText(reader);
-                var processingResult = processor.processPDF(pagesText);
-                var missingLots = processor.getMissingLotNumbers(pdfPath, reader, pagesText, processingResult);
+                var pagesText = extractor.ExtractText(reader);
+                var processingResult = processor.ProcessPDF(pagesText);
+                var missingLots = processor.GetMissingLotNumbers(pdfPath, reader, pagesText, processingResult);
                 if (missingLots.Count == 0) {
                     //this.parsingResultsTextBox.Text = "None";
                     return "None";

@@ -9,9 +9,9 @@ using System.IO;
 namespace PDFChecker {
     class PdfImageProcessor {
 
-        public List<PointF> processPage(string pdfPath, int pageNo) {
+        public List<PointF> ProcessPage(string pdfPath, int pageNo) {
             string tempDir = Path.GetTempPath();
-            string imagePath = extractUsingGhostScript(pdfPath, 
+            string imagePath = ExtractUsingGhostScript(pdfPath, 
                 tempDir + "\\testPNG" + new Random().Next(100, 10000), pageNo - 1);
 
             if (imagePath != null && File.Exists(imagePath)) {
@@ -41,10 +41,10 @@ namespace PDFChecker {
 
                         unsafe
                         {
-                            int bitsPerPixel = getBitsPerPixels(bitmap.PixelFormat);
+                            int bitsPerPixel = GetBitsPerPixels(bitmap.PixelFormat);
                             byte* sourceBytes = (byte*)bmpData.Scan0;
 
-                            int headerTableBottom = getHeaderTableBottom(bitsPerPixel, bmpData);
+                            int headerTableBottom = GetHeaderTableBottom(bitsPerPixel, bmpData);
 
                             int startY = height * headerTableBottom / 3508;
                             startY += 5;
@@ -105,7 +105,7 @@ namespace PDFChecker {
 
         }
 
-        private unsafe int getHeaderTableBottom(int bitsPerPixels, BitmapData bmpData) {
+        private unsafe int GetHeaderTableBottom(int bitsPerPixels, BitmapData bmpData) {
             int y = (int)(bmpData.Height * 0.35);
             int width = bmpData.Width;
 
@@ -136,7 +136,7 @@ namespace PDFChecker {
             return 725;
         }
 
-        private string extractUsingGhostScript(string pdfPath, string imagePath, int pageNo = 0) {
+        private string ExtractUsingGhostScript(string pdfPath, string imagePath, int pageNo = 0) {
             using (var rasterizer = new Ghostscript.NET.Rasterizer.GhostscriptRasterizer()) {
                 rasterizer.Open(pdfPath);
                 imagePath = imagePath + ".png";
@@ -149,7 +149,7 @@ namespace PDFChecker {
 
         }
 
-        private int getBitsPerPixels(PixelFormat pixelFormat) {
+        private int GetBitsPerPixels(PixelFormat pixelFormat) {
             switch (pixelFormat) {
                 case PixelFormat.Format8bppIndexed:
                     return 1;

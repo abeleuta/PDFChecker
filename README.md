@@ -1,1 +1,1 @@
-# PDFChecker
+Uses iTextSharp library to extract some text from PDF.

@@ -14,7 +14,7 @@ namespace PDFChecker {
             "Num"
         };
 
-        public PageText[] extractText(PdfReader reader) {
+        public PageText[] ExtractText(PdfReader reader) {
 
             int numPages = reader.NumberOfPages;
 
@@ -38,15 +38,15 @@ namespace PDFChecker {
 
                 pagesText[i - 1] = new PageText() {
                     Text = PdfTextExtractor.GetTextFromPage(reader, i),
-                    LotNumbers = getLotNumbers(lotNumbersText, i == 1),
-                    LineNumbers = getLineNumbers(lineNumbersText)
+                    LotNumbers = GetLotNumbers(lotNumbersText, i == 1),
+                    LineNumbers = GetLineNumbers(lineNumbersText)
                 };
             }
 
             return pagesText;
         }
 
-        private string[] getLotNumbers(string lotNumbersText, bool isFirstPage) {
+        private string[] GetLotNumbers(string lotNumbersText, bool isFirstPage) {
             string[] lines = lotNumbersText.Split(NEW_LINE_DELIMITER);
             List<string> lotNumbers = new List<string>();
 
@@ -83,13 +83,13 @@ namespace PDFChecker {
             return lotNumbers.ToArray();
         }
 
-        private string[] getLineNumbers(string lineNumbersText) {
+        private string[] GetLineNumbers(string lineNumbersText) {
             string[] lines = lineNumbersText.Split(NEW_LINE_DELIMITER);
             List<string> lotNumbers = new List<string>();
 
             int numHeaderWordsFound = 0;
             foreach (string line in lines) {
-                if (containsWords(line, LINE_START_WORDS)) {
+                if (ContainsWords(line, LINE_START_WORDS)) {
                     numHeaderWordsFound++;
                 } else if (numHeaderWordsFound >= 2) {
                     int num;
@@ -105,10 +105,10 @@ namespace PDFChecker {
             return lotNumbers.ToArray();
         }
 
-        private static bool containsWords(string line, string []words) {
+        private static bool ContainsWords(string line, string []words) {
 
             foreach (var word in words) {
-                if (containsWord(line, word)) {
+                if (ContainsWord(line, word)) {
                     return true;
                 }
             }
@@ -116,7 +116,7 @@ namespace PDFChecker {
             return false;
         }
 
-        private static bool containsWord(string line, string word) {
+        private static bool ContainsWord(string line, string word) {
             int index = line.IndexOf(word, StringComparison.InvariantCultureIgnoreCase);
             if (index != -1) {
                 if (index > 0 && line[index - 1] != ' ') {
