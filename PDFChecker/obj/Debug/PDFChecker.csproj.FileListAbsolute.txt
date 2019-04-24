@@ -1,0 +1,13 @@
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\PDFChecker.exe.config
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\PDFChecker.exe
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\PDFChecker.pdb
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.csprojResolveAssemblyReference.cache
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.Form1.resources
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.Properties.Resources.resources
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.csproj.GenerateResource.Cache
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.exe
+D:\Work\VC++\PDFChecker\PDFChecker\obj\Debug\PDFChecker.pdb
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\iTextSharp.dll
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\itextsharp.xml
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\Ghostscript.NET.dll
+D:\Work\VC++\PDFChecker\PDFChecker\bin\Debug\Ghostscript.NET.xml
